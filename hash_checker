@@ -1,0 +1,19 @@
+<#
+    Hash Checker
+        Specify the algorithm and path(s) of the file(s) of interest
+        Script will output the desired hashes
+        Algorithms are MD5, SHA1, SHA256, SHA384, SHA512
+#>
+
+$algo = "MD5"
+
+$files = @(
+'C:\Windows\System32\kernel32.dll',
+'C:\Windows\SysWOW64\kernel32.dll',
+)
+
+foreach ($file in $files) {
+    $hashOutput = certutil -hashfile $file $algo
+    $hash = ($hashOutput | Where-Object { $_ -match '^[0-9a-fA-F]{32}$' }) -join ""
+    Write-Host "Hash: $hash  |  File: $file" -ForegroundColor Cyan
+}
